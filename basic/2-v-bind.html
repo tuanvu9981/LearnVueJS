@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <title> Vue </title>
+    <body>
+        <div id = "app">
+            <span v-bind:title="message">
+                Move your mouse and skip some seconds
+            </span>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: "You opened this page at " + new Date().toLocaleString
+                }
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <title> Vue </title>
+    <body>
+        <div id = "app">
+            <span v-if ="isDisplayed">This is a message </span>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    isDisplayed : false
+                }
+            })
+        </script>
+    </body>
+</html>
