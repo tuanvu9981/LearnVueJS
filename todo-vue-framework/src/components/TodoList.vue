@@ -11,8 +11,11 @@
     <TodoItem
       v-for="todo in todoList"
       v-bind:key="todo.id"
-      v-bind:props="todo"
+      v-bind:todo_props="todo"
+      v-on:item-complete="markComplete"
+      @delete-item="deleteOneItem"
     />
+    <!-- markComplete will receive the id-data from emit function  -->
   </div>
 </template>
 
@@ -22,6 +25,7 @@ import TodoItem from "./TodoItem";
 
 export default {
   name: "TodoList",
+  components: { TodoItem },
   setup() {
     const todoList = ref([
       { id: 1, name: "Learn Japanese", completed: false },
@@ -30,11 +34,27 @@ export default {
 
       { id: 3, name: "Write API", completed: false },
     ]);
+
+    const markComplete = (id) => {
+      // console.log(id);
+      // console.log(todoList.value); --> cannot print todoList.value.target ...
+      todoList.value = todoList.value.map((item) => {
+        if (item.id === id) item.completed = !item.completed;
+        return item;
+      });
+    };
+
+    const deleteOneItem = (id) => {
+      console.log(id);
+      todoList.value = todoList.value.filter((item) => item.id !== id);
+    };
+
     return {
       todoList,
+      markComplete,
+      deleteOneItem,
     };
   },
-  components: { TodoItem },
 };
 </script>
 

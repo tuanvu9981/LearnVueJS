@@ -1,16 +1,33 @@
 <template>
   <!-- <p class="todo-item completed" :id="id"> -->
-  <p :class="['todo-item', props.completed ? 'completed' : '']">
-    <input type="checkbox" :checked="props.completed" />
-    {{ props.name }}
-    <button class="del-btn">Delete</button>
+  <p :class="['todo-item', todo_props.completed ? 'completed' : '']">
+    <input
+      type="checkbox"
+      :checked="todo_props.completed"
+      v-on:change="markAsCompleted"
+    />
+    {{ todo_props.name }}
+    <button class="del-btn" @click="deleteItem">Delete</button>
   </p>
 </template>
 
 <script>
 export default {
   name: "TodoItem",
-  props: ["props"],
+  props: ["todo_props"],
+  // this props is an array containing a lot of element
+
+  setup(props, context) {
+    const markAsCompleted = () => {
+      context.emit("item-complete", props.todo_props.id);
+    };
+
+    const deleteItem = () => {
+      context.emit("delete-item", props.todo_props.id);
+    };
+
+    return { markAsCompleted, deleteItem };
+  },
 };
 </script>
 
