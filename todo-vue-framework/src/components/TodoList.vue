@@ -8,6 +8,9 @@
 
     <!-- <p v-for="todo in todoList" v-bind:key="todo">{{ todo }}</p> -->
 
+    <AddTodo
+      @add-todo="addNewItem"
+    />
     <TodoItem
       v-for="todo in todoList"
       v-bind:key="todo.id"
@@ -21,19 +24,27 @@
 
 <script>
 import { ref } from "vue";
+//import {v4 as uuidv4} from 'uuid'
+import axios from 'axios'
 import TodoItem from "./TodoItem";
+import AddTodo from "./AddTodo"
 
 export default {
   name: "TodoList",
-  components: { TodoItem },
+  components: { TodoItem, AddTodo },
   setup() {
-    const todoList = ref([
-      { id: 1, name: "Learn Japanese", completed: false },
+    const todoList = ref([]);
 
-      { id: 2, name: "Coding Vue", completed: true },
+    const getAllTodos = async () => {
+      try {
+        const res = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5');
+        todoList.value = res.data; //asign value
+      } catch (error) {
+        console.log(error)
+      }
+    }
 
-      { id: 3, name: "Write API", completed: false },
-    ]);
+    getAllTodos();
 
     const markComplete = (id) => {
       // console.log(id);
@@ -44,15 +55,37 @@ export default {
       });
     };
 
-    const deleteOneItem = (id) => {
-      console.log(id);
-      todoList.value = todoList.value.filter((item) => item.id !== id);
+    const deleteOneItem = async (id) => {
+      // console.log(id);
+      // todoList.value = todoList.value.filter((item) => item.id !== id);
+      try {
+        // delete backend 
+        await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`);
+
+        // at the same time, delete front end 
+        todoList.value = todoList.value.filter((item) => item.id !== id);
+      } catch (error) {
+        console.log(error)
+      }
     };
+
+    const addNewItem = async (newItem) => {
+      try {
+        const res = await axios.post('https://jsonplaceholder.typicode.com/todos',newItem);
+        todoList.value.push(res.data);
+
+      } catch (error) {
+        console.log(error);
+      }
+      //todoList.value.push(newItem);
+    }
 
     return {
       todoList,
       markComplete,
       deleteOneItem,
+      addNewItem,
+      getAllTodos,
     };
   },
 };

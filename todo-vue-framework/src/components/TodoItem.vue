@@ -6,7 +6,7 @@
       :checked="todo_props.completed"
       v-on:change="markAsCompleted"
     />
-    {{ todo_props.name }}
+    {{ todo_props.title }}
     <button class="del-btn" @click="deleteItem">Delete</button>
   </p>
 </template>
